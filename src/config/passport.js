@@ -1,6 +1,7 @@
 const passport = require("passport");
 const User = require("../models/user.model");
 const LocalStrategy = require("passport-local").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // req.logIn(user)
 // app.js에서 req.login에서 user를 받아오고
@@ -20,29 +21,64 @@ passport.deserializeUser(async (id, done) => {
   });
 });
 
-// passport.use 무슨 전략을 사용할지(local)
-passport.use(
-  "local",
-  new LocalStrategy(
-    { usernameField: "email", passwordField: "password" },
-    async (email, password, done) => {
-      try {
-        const user = await User.findOne({ email: email.toLocaleLowerCase() });
+const localStrategyConfig = new LocalStrategy(
+  { usernameField: "email", passwordField: "password" },
+  async (email, password, done) => {
+    try {
+      const user = await User.findOne({ email: email.toLocaleLowerCase() });
 
-        if (!user) {
-          return done(null, false, { msg: `Email ${email} not found` });
-        }
-
-        const isMatch = await user.comparePassword(password);
-
-        if (isMatch) {
-          return done(null, user);
-        }
-
-        return done(null, false, { msg: "Invalid email or password" });
-      } catch (error) {
-        done(error);
+      if (!user) {
+        return done(null, false, { msg: `Email ${email} not found` });
       }
+
+      const isMatch = await user.comparePassword(password);
+
+      if (isMatch) {
+        return done(null, user);
+      }
+
+      return done(null, false, { msg: "Invalid email or password" });
+    } catch (error) {
+      done(error);
     }
-  )
+  }
 );
+// passport.use 무슨 전략을 사용할지(local)
+passport.use("local", localStrategyConfig);
+
+const googleCliendID =
+  "1031558436086-pmj5fo4gbqk4nhrgv4ci055pchqh4qka.apps.googleusercontent.com";
+const googleCliendSecret = "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";
+
+const googleStrategyConfig = new GoogleStrategy(
+  {
+    clientID: googleCliendID,
+    clientSecret: googleCliendSecret,
+    callbackURL: "/auth/google/callback",
+    scope: ["email", "profile"],
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    console.log(profile);
+
+    try {
+      const user = await User.findOne({ googleId: profile.id });
+
+      if (user) {
+        // done(null은 에러는 없고) user정보를 전달해준다.
+        return done(null, user);
+      } else {
+        const newUser = new User({
+          email: profile.emails[0].value,
+          googleId: profile.id,
+        });
+
+        await newUser.save();
+        return done(null, user);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+passport.use("google", googleStrategyConfig);

@@ -90,6 +90,15 @@ app.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
+app.get("/auth/google", passport.authenticate("google"));
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successReturnToOrRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
+
 app.post("/logout", (req, res, next) => {
   req.logOut((err) => {
     if (err) {
