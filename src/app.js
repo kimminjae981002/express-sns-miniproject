@@ -1,9 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const passport = require("passport");
 const ejs = require("ejs");
 const path = require("path");
 
 const app = express();
+
+app.use(passport.initialize());
+app.use(passport.session());
+require("./config/passport");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,7 +29,23 @@ mongoose
   });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  passport.authenticate("local", (err, user, info) => {
+    // passport.js에서 done
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
+      return res.json({ msg: info });
+    }
+
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/");
+    });
+  });
 });
 
 app.get("/signup", (req, res) => {
