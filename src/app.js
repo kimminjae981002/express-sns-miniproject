@@ -4,6 +4,7 @@ const passport = require("passport");
 const ejs = require("ejs");
 const path = require("path");
 const cookieSession = require("cookie-session");
+require("dotenv").config();
 
 const {
   checkAuthenticated,
@@ -12,12 +13,10 @@ const {
 
 const app = express();
 
-const cookieEncryptionKey = "superKey";
-
 app.use(
   cookieSession({
     name: "cookie-session",
-    keys: [cookieEncryptionKey],
+    keys: [process.env.cookieEncryptionKey],
   })
 );
 
@@ -48,9 +47,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 mongoose
-  .connect(
-    `mongodb+srv://cmg981548:EgfYi5otBNhqK0Xy@cluster0.fifhkgv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-  )
+  .connect(process.env.mongo_db)
   .then(() => {
     console.log("mognodb connected");
   })
@@ -77,6 +74,7 @@ app.post("/login", (req, res, next) => {
     }
 
     if (!user) {
+      console.log(err);
       return res.json({ msg: info });
     }
 

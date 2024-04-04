@@ -3,6 +3,8 @@ const User = require("../models/user.model");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
+require("dotenv").config();
+
 // req.logIn(user)
 // app.js에서 req.login에서 user를 받아오고
 // user 정보를 이용해서 세션을 생성하고 저장한다.
@@ -46,14 +48,10 @@ const localStrategyConfig = new LocalStrategy(
 // passport.use 무슨 전략을 사용할지(local)
 passport.use("local", localStrategyConfig);
 
-const googleCliendID =
-  "1031558436086-pmj5fo4gbqk4nhrgv4ci055pchqh4qka.apps.googleusercontent.com";
-const googleCliendSecret = "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";
-
 const googleStrategyConfig = new GoogleStrategy(
   {
-    clientID: googleCliendID,
-    clientSecret: googleCliendSecret,
+    clientID: process.env.googleCliendID,
+    clientSecret: process.env.googleCliendSecret,
     callbackURL: "/auth/google/callback",
     scope: ["email", "profile"],
   },
