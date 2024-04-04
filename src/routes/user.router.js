@@ -42,6 +42,7 @@ usersRouter.post("/logout", (req, res, next) => {
 });
 
 const User = require("../models/user.model");
+const sendMail = require("../mail/mail");
 
 usersRouter.post("/signup", async (req, res) => {
   // user 객체 생성
@@ -50,6 +51,8 @@ usersRouter.post("/signup", async (req, res) => {
   // db에 user 저장
   try {
     await user.save();
+    // 이메일 보내기
+    sendMail();
     return res.status(200).json({
       success: true,
     });
