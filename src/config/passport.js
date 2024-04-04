@@ -47,7 +47,7 @@ const localStrategyConfig = new LocalStrategy(
 );
 // passport.use 무슨 전략을 사용할지(local)
 passport.use("local", localStrategyConfig);
-console.log(process.env.googleCliendID);
+
 const googleStrategyConfig = new GoogleStrategy(
   {
     clientID: process.env.googleCliendID,

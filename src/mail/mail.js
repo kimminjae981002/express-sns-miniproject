@@ -1,5 +1,5 @@
 const mailer = require("nodemailer");
-const { welcome } = require("../mail/mail_template");
+const welcome = require("./mail_template");
 const goodbye = require("./goodbye_template");
 
 require("dotenv").config();
@@ -30,18 +30,18 @@ const getEmailData = (to, name, template) => {
   return data;
 };
 
-const sendMail = () => {
+const sendMail = (to, name, type) => {
   const transporter = mailer.createTransport({
     service: "Gmail",
     auth: {
-      user: "nbcamp3@gmail.com",
-      password: process.env.GOOGLE_APP_PASSWORD,
+      user: process.env.GOOGLE_USER,
+      pass: process.env.GOOGLE_APP_PASSWORD,
     },
   });
 
   const mail = getEmailData(to, name, type);
 
-  transporter.sendEmail(mail, (error, response) => {
+  transporter.sendMail(mail, (error, response) => {
     if (error) {
       console.log(error);
     } else {
