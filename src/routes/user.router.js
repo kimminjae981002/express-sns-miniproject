@@ -52,7 +52,7 @@ usersRouter.post("/signup", async (req, res) => {
   try {
     await user.save();
     // 이메일 보내기
-    await sendMail(user.email, "user", "welcome");
+    await sendMail(user.email, "welcome");
     return res.status(200).json({
       success: true,
     });

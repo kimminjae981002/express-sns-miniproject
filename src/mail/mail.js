@@ -1,10 +1,11 @@
 const mailer = require("nodemailer");
-const welcome = require("./mail_template");
+const welcome = require("./welcome_template");
 const goodbye = require("./goodbye_template");
 
 require("dotenv").config();
 
-const getEmailData = (to, name, template) => {
+// html template를 이용한 로직
+const getEmailData = (to, template) => {
   let data = null;
 
   switch (template) {
@@ -12,7 +13,7 @@ const getEmailData = (to, name, template) => {
       data = {
         from: "보내는 사람 이름",
         to,
-        subject: `hello ${name}`,
+        subject: `hello`,
         html: welcome(),
       };
       break;
@@ -20,7 +21,7 @@ const getEmailData = (to, name, template) => {
       data = {
         from: "보내는 사람 이름",
         to,
-        subject: `Goodbye ${name}`,
+        subject: `Goodbye`,
         html: goodbye(),
       };
       break;
@@ -30,7 +31,8 @@ const getEmailData = (to, name, template) => {
   return data;
 };
 
-const sendMail = (to, name, type) => {
+// nodemailer를 이용한 메일 보내기 로직
+const sendMail = (to, type) => {
   const transporter = mailer.createTransport({
     service: "Gmail",
     auth: {
@@ -39,8 +41,10 @@ const sendMail = (to, name, type) => {
     },
   });
 
-  const mail = getEmailData(to, name, type);
+  // 템플릿 함수를 mail 변수에 담음
+  const mail = getEmailData(to, type);
 
+  // nodemailer를 이용해서 mail 보내기
   transporter.sendMail(mail, (error, response) => {
     if (error) {
       console.log(error);
@@ -52,4 +56,5 @@ const sendMail = (to, name, type) => {
   });
 };
 
+// 회원가입 시 메일 보내기 위해 export - user.router.js
 module.exports = sendMail;
