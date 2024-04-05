@@ -2,6 +2,7 @@ const passport = require("passport");
 const User = require("../models/user.model");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const KakaoStrategy = require("passport-kakao").Strategy;
 
 require("dotenv").config();
 
@@ -80,3 +81,31 @@ const googleStrategyConfig = new GoogleStrategy(
 );
 
 passport.use("google", googleStrategyConfig);
+
+const KakaoStrategyConfig = new KakaoStrategy(
+  {
+    clientID: process.env.KAKAO_CIIENT_ID,
+    clientSecret: "",
+    callbackURL: "/auth/kakao/callback",
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      const user = await User.findOne({ kakaoId: profile.id });
+      if (user) {
+        // done(null은 에러는 없고) user정보를 전달해준다.
+        return done(null, user);
+      } else {
+        const newUser = new User({
+          kakaoId: profile.id,
+        });
+
+        await newUser.save();
+        return done(null, user);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+passport.use("kakao", KakaoStrategyConfig);

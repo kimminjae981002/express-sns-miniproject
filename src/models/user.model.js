@@ -16,6 +16,11 @@ const userSchema = mongoose.Schema({
     unique: true,
     sparse: true,
   },
+  kakaoId: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
 });
 // userSchema라는 변수에 mongoose Schema를 생성한다.
 
