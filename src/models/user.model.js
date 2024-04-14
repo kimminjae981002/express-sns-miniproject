@@ -1,27 +1,65 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema = mongoose.Schema({
-  email: {
-    type: String,
-    unique: true,
-    trim: true,
+const userSchema = mongoose.Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      minLength: 5,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    kakaoId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    firstName: {
+      type: String,
+      default: "First Name",
+    },
+    lastName: {
+      type: String,
+      default: "Last Nanme",
+    },
+    bio: {
+      type: String,
+      dafault: "데이터 없음",
+    },
+    hometown: {
+      type: String,
+      default: "데이터 없음",
+    },
+    workplace: {
+      type: String,
+      default: "데이터 없음",
+    },
+    education: {
+      type: String,
+      default: "데이터 없음",
+    },
+    contact: {
+      type: Number,
+      default: "01012345678",
+    },
+    friends: [{ type: String }], // 나의 친구들 배열 안에 넣어줌
+    friendRequests: [{ type: String }],
   },
-  password: {
-    type: String,
-    minLength: 5,
-  },
-  googleId: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-  kakaoId: {
-    type: String,
-    unique: true,
-    sparse: true,
-  },
-});
+  { timestamps: true } // 유저 콜렉션 안에 document가 생성될 때 createdAt 확인 가능
+);
 // userSchema라는 변수에 mongoose Schema를 생성한다.
 
 const saltRounds = 10;

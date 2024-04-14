@@ -69,6 +69,9 @@ const googleStrategyConfig = new GoogleStrategy(
         const newUser = new User({
           email: profile.emails[0].value,
           googleId: profile.id,
+          username: profile.displayName,
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
         });
 
         await newUser.save();
