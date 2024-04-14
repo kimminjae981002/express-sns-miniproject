@@ -7,6 +7,11 @@ require("dotenv").config();
 
 const mainRouter = require("./routes/main.router");
 const usersRouter = require("./routes/user.router");
+const commentsRouter = require("./routes/comments.router");
+const postsRouter = require("./routes/posts.router");
+const profilesRouter = require("./routes/profile.router");
+const likesRouter = require("./routes/likes.router");
+const friendsRouter = require("./routes/friends.router");
 
 const app = express();
 
@@ -54,6 +59,11 @@ mongoose
 
 app.use("/", mainRouter);
 app.use("/", usersRouter);
+app.use("/posts", postsRouter);
+app.use("/posts/:id/comments", commentsRouter);
+app.use("/profile/:id", profilesRouter);
+app.use("/freinds", friendsRouter);
+app.use("/posts/:id/like", likesRouter);
 
 app.listen("3000", (req, res) => {
   console.log("listening 3000");
