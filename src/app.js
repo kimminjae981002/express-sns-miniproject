@@ -37,6 +37,8 @@ app.use(function (request, response, next) {
   next();
 });
 
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport");
@@ -48,6 +50,8 @@ app.use(express.static(path.join(__dirname, "public"))); // localhost:3000
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+
 
 mongoose
   .connect(process.env.mongo_db)
