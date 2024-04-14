@@ -43,7 +43,8 @@ require("./config/passport");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/static", express.static(path.join(__dirname, "public")));
+// app.use("/static", express.static(path.join(__dirname, "public"))); // localhost:3000/static
+app.use(express.static(path.join(__dirname, "public"))); // localhost:3000
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -58,7 +59,7 @@ mongoose
   });
 
 app.use("/", mainRouter);
-app.use("/", usersRouter);
+app.use("/auth", usersRouter);
 app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
 app.use("/profile/:id", profilesRouter);
