@@ -31,9 +31,11 @@ router.post('/', checkAuthenticated, upload, (req, res) => {
       username: req.user.username
     }
   }).then(result => {
+    req.flash('success', '포스트 생성 성공') // 포스트가 생성 되면 req.flash에 전달 해준다.
     res.redirect('back')
   }).catch(err => {
-    console.log('err')
+    req.flash('error', '포스트 생성 실패')
+    res.redirect('back')
   })
 })
 
@@ -45,7 +47,9 @@ router.get("/", checkAuthenticated, (req, res) => {
     .then(posts => {
       res.render("posts/index", {
         posts: posts,
-        currentUser: req.user
+        currentUser: req.user,
+        success: req.flash('success'),
+        error: req.flash('error')
       })
     }).catch(err => {
     console.log(err)
