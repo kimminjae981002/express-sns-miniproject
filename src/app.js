@@ -51,8 +51,6 @@ app.use(express.static(path.join(__dirname, "public"))); // localhost:3000
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-
-
 mongoose
   .connect(process.env.mongo_db)
   .then(() => {
@@ -69,6 +67,11 @@ app.use("/posts/:id/comments", commentsRouter);
 app.use("/profile/:id", profilesRouter);
 app.use("/freinds", friendsRouter);
 app.use("/posts/:id/like", likesRouter);
+
+// 에러처리
+app.use((error, req, res, next) => {
+  res.json({ message: error.message });
+  });
 
 app.listen("3000", (req, res) => {
   console.log("listening 3000");
