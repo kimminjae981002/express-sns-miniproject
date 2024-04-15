@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const path = require("path");
 const cookieSession = require("cookie-session");
+const flash = require('connect-flash')
 require("dotenv").config();
 
 const mainRouter = require("./routes/main.router");
@@ -48,6 +49,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use("/static", express.static(path.join(__dirname, "public"))); // localhost:3000/static
 app.use(express.static(path.join(__dirname, "public"))); // localhost:3000
 
+app.use(flash())
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -59,6 +62,15 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+app.get('/send', (req, res) => {
+  req.flash('post success', '포스트가 생성 되었습니다.')
+  res.redirect('/receive')
+})
+  
+app.get('/receive', (req, res) => {
+  res.send(req.flash('post success')[0])
+})
 
 app.use("/", mainRouter);
 app.use("/auth", usersRouter);
