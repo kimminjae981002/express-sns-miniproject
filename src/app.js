@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const path = require("path");
 const cookieSession = require("cookie-session");
-const flash = require('connect-flash')
+const flash = require('connect-flash');
 require("dotenv").config();
 
 const mainRouter = require("./routes/main.router");
@@ -44,12 +44,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport");
 
+app.use(flash())
+
+app.use((req, res, next) => {
+  res.locals.error = req.flash('error')
+  res.locals.success = req.flash('success')
+  res.locals.currentUser =  req.user,
+  console.log(res.locals)
+  next()
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use("/static", express.static(path.join(__dirname, "public"))); // localhost:3000/static
 app.use(express.static(path.join(__dirname, "public"))); // localhost:3000
 
-app.use(flash())
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
