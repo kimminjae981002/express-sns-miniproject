@@ -52,7 +52,7 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.error = req.flash('error')
   res.locals.success = req.flash('success')
-  res.locals.currentUser =  req.user,
+  res.locals.currentUser = req.user,
   // console.log(res.locals)
   next()
 });
