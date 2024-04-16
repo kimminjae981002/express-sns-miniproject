@@ -57,7 +57,7 @@ router.get("/", checkAuthenticated, (req, res) => {
 });
 
 // 포스트 수정 버튼 클릭 시 render
-router.get('/:id/edit', checkPostOwnership, (req, res) => {
+router.get('/:id/edit', checkPostOwnership, async (req, res) => {
   // const post = Post.findById(req.params.id)
   res.render('posts/edit',{post: req.post})
 })
@@ -76,6 +76,18 @@ router.put('/:id', checkPostOwnership, (req, res) => {
         res.redirect('/posts')
     }
   })
+})
+
+// 포스트 삭제
+router.delete('/:id', checkPostOwnership,async (req, res) => {
+  const post = await Post.findByIdAndDelete(req.params.id);
+
+  if (!post) {
+    req.flash('error','포스트 삭제에 실패했습니다.')
+  }
+
+  req.flash('success', '포스트 삭제에 성공했습니다.')
+  res.redirect('/posts')
 })
 
 module.exports = router;

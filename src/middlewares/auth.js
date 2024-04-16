@@ -31,7 +31,7 @@ function checkPostOwnership(req, res, next) {
       }
       }).catch((error) => {
         if (error) {
-          req.falsh('error', "포스트가 없거나 에러가 발생했습니다.")
+          req.flash('error', "포스트가 없거나 에러가 발생했습니다.")
         res.redirect('back')}
     })
   }
