@@ -4,6 +4,7 @@ const passport = require("passport");
 const path = require("path");
 const cookieSession = require("cookie-session");
 const flash = require('connect-flash');
+const methodOverride = require('method-override')
 require("dotenv").config();
 
 const mainRouter = require("./routes/main.router");
@@ -43,6 +44,8 @@ app.use(function (request, response, next) {
 app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport");
+
+app.use(methodOverride('_method'))
 
 app.use(flash())
 
