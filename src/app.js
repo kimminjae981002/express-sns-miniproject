@@ -90,7 +90,7 @@ app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
 app.use("/profile/:id", profilesRouter);
 app.use("/freinds", friendsRouter);
-app.use("/posts/:id/like", likesRouter);
+app.use(likesRouter);
 
 // 에러처리
 app.use((error, req, res, next) => {
