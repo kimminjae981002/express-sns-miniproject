@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema(
   {
-    description: String,
+    description: {
+      type: String,
+      required: true
+  },
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -50,7 +50,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error')
   res.locals.success = req.flash('success')
   res.locals.currentUser =  req.user,
-  console.log(res.locals)
+  // console.log(res.locals)
   next()
 });
 
@@ -91,6 +91,7 @@ app.use("/posts/:id/like", likesRouter);
 
 // 에러처리
 app.use((error, req, res, next) => {
+  console.log(error)
   res.json({ message: error.message });
   });
 

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { checkAuthenticated } = require("../middlewares/auth");
+const { checkAuthenticated, checkPostOwnership } = require("../middlewares/auth");
 const Post = require('../models/posts.model')
 const multer = require('multer')
 const path = require('path')
@@ -21,7 +21,6 @@ const upload = multer({ storage: storageEngine }).single('image')
 router.post('/', checkAuthenticated, upload, (req, res) => {
   let name = req.body.name;
   let description = req.body.description;
-  console.log(description,name)
   let image = req.file ? req.file.filename : "";
   Post.create({
     name,
@@ -32,6 +31,7 @@ router.post('/', checkAuthenticated, upload, (req, res) => {
       username: req.user.username
     }
   }).then(result => {
+    console.log(result)
     req.flash('success', '포스트 생성 성공') // 포스트가 생성 되면 req.flash에 전달 해준다.
     res.redirect('back')
   }).catch(err => {
@@ -56,5 +56,10 @@ router.get("/", checkAuthenticated, (req, res) => {
   })
 
 });
+
+router.get('/:id/edit', checkPostOwnership, (req, res) => {
+  // const post = Post.findById(req.params.id)
+  res.render('posts/edit',{post: req.post})
+})
 
 module.exports = router;
