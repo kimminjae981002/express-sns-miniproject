@@ -89,7 +89,7 @@ app.use("/auth", usersRouter);
 app.use("/posts", postsRouter);
 app.use("/posts/:id/comments", commentsRouter);
 app.use("/profile/:id", profilesRouter);
-app.use("/freinds", friendsRouter);
+app.use("/friends", friendsRouter);
 app.use(likesRouter);
 
 // 에러처리

@@ -56,7 +56,7 @@ const userSchema = mongoose.Schema(
       default: "01012345678",
     },
     friends: [{ type: String }], // 나의 친구들 배열 안에 넣어줌
-    friendRequests: [{ type: String }],
+    friendsRequests: [{ type: String }],
   },
   { timestamps: true } // 유저 콜렉션 안에 document가 생성될 때 createdAt 확인 가능
 );
