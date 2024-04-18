@@ -41,7 +41,7 @@ router.post('/', checkAuthenticated, upload, (req, res) => {
   })
 })
 
-// Post DB에 있는 모든 것들을 찾고 comments 데이터도 보여주고 실행해라
+// Post DB에 있는 모든 것들을 찾고 comments 전체 모델에 있는 데이터도 보여주고 실행해라
 // posts에는 posts 데이터를 가져오고 currentUser에는 현재 로그인 된 유저를 넣어준다.
 // ejs에서 사용가능하다.
 router.get("/", checkAuthenticated, (req, res) => {

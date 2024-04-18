@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
     },
     bio: {
       type: String,
-      dafault: "데이터 없음",
+      default: "데이터 없음",
     },
     hometown: {
       type: String,

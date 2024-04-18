@@ -1,5 +1,6 @@
 const Post = require('../models/posts.model')
-const Comment = require('../models/comments.model')
+const Comment = require('../models/comments.model');
+const User = require('../models/user.model');
 
 // passport에서 제공하는 인증 미들웨어
 function checkAuthenticated(req, res, next) {
@@ -56,9 +57,25 @@ function checkCommentOwnership(req, res, next) {
   }
 }
 
+async function checkIsMe(req, res, next) {
+  if (req.isAuthenticated()) {
+    await User.findById(req.params.id)
+      .then((user) => {
+        if (user._id.equals(req.user._id)) {
+          next()
+        }
+      })
+      .catch(() => {
+      req.flash('error','접근 권한이 없습니다.')
+    })
+  }
+
+}
+
 module.exports = {
   checkAuthenticated,
   checkNotAuthenticated,
   checkPostOwnership,
-  checkCommentOwnership
+  checkCommentOwnership,
+  checkIsMe
 };
